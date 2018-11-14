@@ -3,7 +3,7 @@
     <BaseHero 
       title="Add News" 
       subtitle="based on defaults"/>
-    <section class="section">
+    <section class="section has-background-light">
       <div class="container">
         <div class="columns">
           <div class="column">

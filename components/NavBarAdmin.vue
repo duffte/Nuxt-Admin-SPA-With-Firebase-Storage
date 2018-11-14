@@ -6,7 +6,7 @@
     aria-label="main navigation">
     <div class="navbar-brand">
       <router-link 
-        to="/admin" 
+        to="/" 
         class="navbar-item">
         <img 
           src="~/assets/emil.svg" 
@@ -29,28 +29,28 @@
       class="navbar-menu">
       <div class="navbar-start">
         <p class="navbar-item">
-          <nuxt-link to="/admin/addcar">Add Car</nuxt-link>
+          <nuxt-link to="/addcar">Add Car</nuxt-link>
         </p>
         <p class="navbar-item">
-          <nuxt-link to="/admin/addnews">Add News</nuxt-link>
+          <nuxt-link to="/addnews">Add News</nuxt-link>
         </p>     
-        <b-dropdown position="is-bottom-left">
-          <a 
-            slot="trigger" 
-            class="navbar-item">
-            <span>Configure Defaults</span>
-            <b-icon icon="menu-down"/>
+        <div class="navbar-item has-dropdown is-hoverable">
+          <a class="navbar-link">
+            Edit Defaults
           </a>
-          <b-dropdown-item value="settings">
-            <nuxt-link to="/admin/defaults/news">News</nuxt-link>
-          </b-dropdown-item>
-          <b-dropdown-item value="settings">
-            <nuxt-link to="/admin/defaults/cars">Cars</nuxt-link>
-          </b-dropdown-item>
-          <b-dropdown-item value="settings">
-            <nuxt-link to="/admin/defaults/brands">Brands</nuxt-link>
-          </b-dropdown-item>
-        </b-dropdown>
+
+          <div class="navbar-dropdown">
+            <a class="navbar-item">
+              <nuxt-link to="/defaults/news">News</nuxt-link>
+            </a>
+            <a class="navbar-item">
+              <nuxt-link to="/defaults/cars">Cars</nuxt-link>
+            </a>
+            <a class="navbar-item">
+              <nuxt-link to="/defaults/brands">Brands</nuxt-link>
+            </a>
+          </div>
+        </div>
       </div>
     </div> 
   </nav>

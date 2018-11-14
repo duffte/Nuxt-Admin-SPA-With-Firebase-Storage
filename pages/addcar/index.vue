@@ -3,64 +3,106 @@
     <BaseHero 
       title="Add a car" 
       subtitle="based on defaults"/>
-    <section class="section">
+    <section class="section has-background-light">
       <div class="container">           
         <div class="columns">
           <div class="column">
             <h2 class="title">
               Neues Auto
             </h2>
-            <b-field label="Name">
-              <b-input v-model="car.carName"/>
-            </b-field>
-            <b-field label="Brand">
-              <b-input v-model="car.carBrand"/>
-            </b-field>
-            <b-field label="Model">
-              <b-input v-model="car.carModel"/>
-            </b-field>
-            <b-field label="Year">
-              <b-input v-model="car.carYear"/>
-            </b-field>
-            <div>
-              <button
-                v-if="!uploadEnd && !uploading"
-                @click="selectFile">
-                Upload an image
-              </button>
-              <input
-                id="files"
-                ref="uploadInput"
-                :multiple="false"
-                type="file"
-                name="file"
-                accept="image/*"
-                @change="detectFiles($event)" >
-              <progress
-                v-if="uploading && !uploadEnd"
-                :value="progressUpload">
-                {{ progressUpload }}%
-              </progress>
-              <img
-                v-if="uploadEnd"
-                :src="downloadURL"
-                width="100%"
-              >
-              <div v-if="uploadEnd">
-                <button
-                  class="button"
-                  @click="deleteImage()"
+            <b-field 
+              v-for="(item, index) in carsData" 
+              :label="item.name"
+              :key="index">
+              <!-- Text-->
+              <b-field v-if="item.type == 'text'">
+                <b-input 
+                  v-model="item.content" 
+                />
+              </b-field>
+              <!-- Textarea-->
+              <b-field v-if="item.type == 'number'">
+                <b-input 
+                  v-model="item.content" 
+                  type="number"/>
+              </b-field>
+              <!-- Textarea-->
+              <b-field v-if="item.type == 'textarea'">
+                <b-input 
+                  v-model="item.content"  
+                  type="textarea"/>
+              </b-field>
+              <!-- Tags-->
+              <b-field v-if="item.type == 'tags'">
+                <b-taginput
+                  v-model="tags"
+                  ellipsis
+                  icon="label"
+                  placeholder="Add a tag"/>
+              </b-field>
+              <!-- Date-->
+              <b-field v-if="item.type == 'date'">
+                <b-datepicker 
+                  v-model="date"
+                  :first-day-of-week="1"
+                  placeholder="Click to select...">
+
+                  <button 
+                    class="button is-primary"
+                    @click="date = new Date()">
+                    <b-icon icon="calendar-today"/>
+                    <span>Today</span>
+                  </button>
+
+                  <button 
+                    class="button is-danger"
+                    @click="date = null">
+                    <b-icon icon="close"/>
+                    <span>Clear</span>
+                  </button>
+                </b-datepicker>
+              </b-field>
+              <!-- Image-->
+              <div v-if="item.type == 'image'">
+                <input
+                  id="files"
+                  ref="uploadInput"
+                  :multiple="false"
+                  type="file"
+                  name="file"
+                  accept="image/*"
+                  @change="detectFiles($event)" >
+                <progress
+                  v-if="uploading && !uploadEnd"
+                  :value="progressUpload">
+                  {{ progressUpload }}%
+                </progress>
+                <img
+                  v-if="uploadEnd"
+                  :src="downloadURL"
+                  width="100%"
                 >
-                  Delete
-                </button>
+                <div v-if="uploadEnd">
+                  <button
+                    class="button"
+                    @click="deleteImage()"
+                  >
+                    Delete
+                  </button>
+                </div>
+                <b-field label="Source URL">
+                  <b-input 
+                    v-model="item.content"  
+                    type="text"/>
+                </b-field>
               </div>
-            </div>
-            <b-field label="Image Source">
-              <b-input v-model="car.carImage"/>
+
             </b-field>
             
+            
             <button 
-              :disabled="writeCarSuccessful" 
+              :disabled="writeCarSuccessful"
+              class="button" 
               @click="writeCarToFirestore">
               <span v-if="!writeCarSuccessful">Save Car</span>
               <span v-else>Successful!</span>
@@ -93,10 +135,11 @@ export default {
         { name: 'hehe', id: 2 },
         { name: 'hehehe', id: 3 }
       ],
-      newSpecs: [],
       tags: [],
       cars: [],
       name: '',
+      filteredTags: [],
+      date: new Date(),
       //upload image
       oldImgUrl: '',
       progressUpload: 0,
@@ -205,12 +248,7 @@ export default {
         .collection('cars')
         .doc(this.car.carName.replace(/\s+/g, '-').toLowerCase())
       const document = {
-        carName: this.car.carName.trim(),
-        carModel: this.car.carModel.trim(),
-        carBrand: this.car.carBrand.trim(),
-        id: this.car.carName.replace(/\s+/g, '-').toLowerCase(),
-        carImage: this.car.carImage.trim(),
-        carYear: this.car.carYear.trim(),
+        carsData: this.carsData,
         specs: this.specs
       }
       try {
@@ -223,19 +261,15 @@ export default {
     }
   },
   async asyncData({ app, store }) {
-    let cars = []
-    try {
-      await fireDb
-        .collection('cars')
-        .get()
-        .then(querySnapshot => {
-          querySnapshot.forEach(doc => {
-            cars.push(doc.data())
-          })
-        })
-      return { cars: cars }
-    } catch (error) {
-      console.log('Error getting document:', error)
+    let cars = await fireDb
+      .collection('defaults')
+      .doc('carsData')
+      .get()
+
+    if (cars.data()) {
+      return {
+        carsData: cars.data().carsData
+      }
     }
   }
 }

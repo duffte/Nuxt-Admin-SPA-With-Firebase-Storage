@@ -8,133 +8,139 @@
         <div class="columns">
           <div class="column is-6">
             <div v-if="carsData.length > 0">
-              <!-- Data Loop -->
-              <div 
-                v-for="(item, index) in carsData"                 
-                :key="index" 
-                class="box">  
+              
+              <draggable 
+                v-model="carsData" 
+                @start="drag=true" 
+                @end="drag=false">
+                <!-- Data Loop -->
+                <div 
+                  v-for="(item, index) in carsData"                 
+                  :key="index" 
+                  class="box">  
 
-                <!-- Name -->  
-                <h2 class="title is-4">{{ item.name }} ({{ item.type }}) <button 
-                  class="delete" 
-                  @click="deleteBlock"/></h2>        
-                <b-field>
-                  <b-input v-model="item.name"/>                
-                </b-field> 
+                  <!-- Name -->  
+                  <h2 class="title is-4">{{ item.name }} ({{ item.type }}) <button 
+                    class="delete" 
+                    @click="deleteBlock"/></h2>        
+                  <b-field>
+                    <b-input v-model="item.name"/>                
+                  </b-field> 
                   
-                <!-- Fields row 1 -->
-                <b-field>
-                  <b-radio-button 
-                    v-model="item.type"
-                    native-value="text"
-                    type="is-success">
-                    <b-icon icon="text-short"/>
-                    <span>Text</span>
-                  </b-radio-button>
+                  <!-- Fields row 1 -->
+                  <b-field>
+                    <b-radio-button 
+                      v-model="item.type"
+                      native-value="text"
+                      type="is-success">
+                      <b-icon icon="text-short"/>
+                      <span>Text</span>
+                    </b-radio-button>
 
-                  <b-radio-button 
-                    v-model="item.type"
-                    native-value="number"
-                    type="is-success">
-                    <b-icon icon="numeric"/>
-                    <span>Number</span>
-                  </b-radio-button>
+                    <b-radio-button 
+                      v-model="item.type"
+                      native-value="number"
+                      type="is-success">
+                      <b-icon icon="numeric"/>
+                      <span>Number</span>
+                    </b-radio-button>
 
-                  <b-radio-button 
-                    v-model="item.type"
-                    native-value="textarea"
-                    type="is-success">
-                    <b-icon icon="text-subject"/>
-                    <span>Textarea</span>
-                  </b-radio-button>
+                    <b-radio-button 
+                      v-model="item.type"
+                      native-value="textarea"
+                      type="is-success">
+                      <b-icon icon="text-subject"/>
+                      <span>Textarea</span>
+                    </b-radio-button>
 
-                  <b-radio-button 
-                    v-model="item.type"
-                    native-value="tags"
-                    type="is-success">
-                    <b-icon icon="tag"/>
-                    <span>Tags</span>
-                  </b-radio-button>
+                    <b-radio-button 
+                      v-model="item.type"
+                      native-value="tags"
+                      type="is-success">
+                      <b-icon icon="tag"/>
+                      <span>Tags</span>
+                    </b-radio-button>
 
-                  <b-radio-button 
-                    v-model="item.type"
-                    native-value="date"
-                    type="is-success">
-                    <b-icon icon="calendar-range"/>
-                    <span>Date</span>
-                  </b-radio-button>
+                    <b-radio-button 
+                      v-model="item.type"
+                      native-value="date"
+                      type="is-success">
+                      <b-icon icon="calendar-range"/>
+                      <span>Date</span>
+                    </b-radio-button>
 
-                  <b-radio-button 
-                    v-model="item.type"
-                    native-value="image"
-                    type="is-success">
-                    <b-icon icon="image"/>
-                    <span>Image</span>
-                  </b-radio-button>                  
-                </b-field>
+                    <b-radio-button 
+                      v-model="item.type"
+                      native-value="image"
+                      type="is-success">
+                      <b-icon icon="image"/>
+                      <span>Image</span>
+                    </b-radio-button>
+                
+                  </b-field>
 
-                <!-- Fields row 2 -->
+                  <!-- Fields row 2 -->
 
-                <b-field>
-                  <b-radio-button 
-                    v-model="item.type"
-                    native-value="car"
-                    type="is-success">
-                    <b-icon icon="car"/>
-                    <span>Car</span>
-                  </b-radio-button>
+                  <b-field>
+                    <b-radio-button 
+                      v-model="item.type"
+                      native-value="car"
+                      type="is-success">
+                      <b-icon icon="car"/>
+                      <span>Car</span>
+                    </b-radio-button>
 
-                  <b-radio-button 
-                    v-model="item.type"
-                    native-value="news"
-                    type="is-success">
-                    <b-icon icon="newspaper"/>
-                    <span>News</span>
-                  </b-radio-button>
+                    <b-radio-button 
+                      v-model="item.type"
+                      native-value="news"
+                      type="is-success">
+                      <b-icon icon="newspaper"/>
+                      <span>News</span>
+                    </b-radio-button>
 
-                  <b-radio-button 
-                    v-model="item.type"
-                    native-value="brand"
-                    type="is-success">
-                    <b-icon icon="karate"/>
-                    <span>Brand</span>
-                  </b-radio-button>
+                    <b-radio-button 
+                      v-model="item.type"
+                      native-value="brand"
+                      type="is-success">
+                      <b-icon icon="karate"/>
+                      <span>Brand</span>
+                    </b-radio-button>
 
-                  <b-radio-button 
-                    v-model="item.type"
-                    native-value="topic"
-                    type="is-success">
-                    <b-icon icon="pound-box"/>
-                    <span>Topic</span>
-                  </b-radio-button>
+                    <b-radio-button 
+                      v-model="item.type"
+                      native-value="topic"
+                      type="is-success">
+                      <b-icon icon="pound-box"/>
+                      <span>Topic</span>
+                    </b-radio-button>
 
-                  <b-radio-button 
-                    v-model="item.type"
-                    native-value="feat"
-                    type="is-success">
-                    <b-icon icon="animation"/>
-                    <span>Feat</span>
-                  </b-radio-button>
+                    <b-radio-button 
+                      v-model="item.type"
+                      native-value="feat"
+                      type="is-success">
+                      <b-icon icon="animation"/>
+                      <span>Feat</span>
+                    </b-radio-button>
 
-                  <b-radio-button 
-                    v-model="item.type"
-                    native-value="chart"
-                    type="is-success">
-                    <b-icon icon="poll-box"/>
-                    <span>Chart</span>
-                  </b-radio-button>                  
-                </b-field>
+                    <b-radio-button 
+                      v-model="item.type"
+                      native-value="chart"
+                      type="is-success">
+                      <b-icon icon="poll-box"/>
+                      <span>Chart</span>
+                    </b-radio-button>                  
+                  </b-field>
 
-                <!-- Guide -->
-                <b-field 
-                  label="Guide">
-                  <b-input 
-                    v-model="item.guide" 
-                    placeholder="How to use the field"/>                
-                </b-field> 
+                  <!-- Guide -->
+                  <b-field 
+                    label="Guide">
+                    <b-input 
+                      v-model="item.guide" 
+                      placeholder="How to use the field"/>                
+                  </b-field> 
 
-              </div>
-            </div>  
+                </div>
+            </draggable></div>  
             <hr>
             <button 
               class="button is-fullwidth" 
@@ -146,8 +152,11 @@
                 @click="writeToFirestore">Update Cars Defaults</button>
             </b-field>
           </div>
-          <div class="column is-6">
-            Add or change the existing fields to manipulate the default datafields you see when adding new things to the website
+          <div class="column is-6 content">
+            <h2>How to</h2>
+            <p class="subtitle">Add or change the existing fields to manipulate the default datafields you see when adding new things to the website
+            </p>
+            <img src="~/assets/dragdrop.svg">
           </div>
         </div>
       </div>

@@ -11,11 +11,9 @@ module.exports = {
     meta: [
       { charset: 'utf-8' },
       { name: 'viewport', content: 'width=device-width, initial-scale=1' },
-      { hid: 'description', name: 'description', content: pkg.description }
+      { hid: 'description', name: 'description', content: 'Admin' }
     ],
-    link: [
-      { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }
-    ]
+    link: [{ rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }]
   },
 
   /*
@@ -26,7 +24,7 @@ module.exports = {
   /*
   ** Global CSS
   */
-    css: ['simplemde/dist/simplemde.min.css'],
+  css: ['simplemde/dist/simplemde.min.css'],
 
   /*
   ** Plugins to load before mounting the App
@@ -37,14 +35,14 @@ module.exports = {
     { src: '~plugins/nuxt-simplemde-plugin.js', ssr: false }
   ],
 
-
   /*
   ** Nuxt.js modules
   */
-  modules: [,
+  modules: [
+    ,
     // Doc: https://buefy.github.io/#/documentation
     'nuxt-buefy',
-    
+
     '@nuxtjs/markdownit'
   ],
 

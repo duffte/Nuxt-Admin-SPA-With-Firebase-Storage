@@ -13,10 +13,16 @@
     "precommit": "npm run lint"
   },
   "dependencies": {
+    "@nuxtjs/markdownit": "^1.2.2",
     "cross-env": "^5.2.0",
-    "nuxt": "^2.0.0",
     "express": "^4.16.3",
-    "nuxt-buefy": "^0.2.1"
+    "firebase": "^5.5.8",
+    "nuxt": "^2.0.0",
+    "nuxt-buefy": "^0.2.1",
+    "simplemde": "^1.11.2",
+    "vue-markdown": "^2.2.4",
+    "vue-simplemde": "^0.4.9",
+    "vuedraggable": "^2.16.0"
   },
   "devDependencies": {
     "nodemon": "^1.11.0",

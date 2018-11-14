@@ -1,61 +1,36 @@
 <template>
   <div>
-    <nav
-      class="navbar header has-shadow is-primary"
-      role="navigation"
-      aria-label="main navigation">
-      <div class="navbar-brand">
-        <a
-          class="navbar-item"
-          href="/">
-          <img
-            src="~assets/buefy.png"
-            alt="Buefy"
-            height="28">
-        </a>
-
-        <div class="navbar-burger">
-          <span/>
-          <span/>
-          <span/>
-        </div>
-      </div>
-    </nav>
-
-    <section class="main-content columns">
-
-      <aside class="column is-2 section">
-        <p class="menu-label is-hidden-touch">General</p>
-        <ul class="menu-list">
-          <li
-            v-for="(item, key) of items"
-            :key="key">
-            <nuxt-link
-              :to="item.to"
-              exact-active-class="is-active">
-              <b-icon :icon="item.icon"/> {{ item.title }}
-            </nuxt-link>
-          </li>
-        </ul>
-      </aside>
-
-      <div class="container column is-10">
-        <nuxt />
-      </div>
-
-    </section>
+    <NavBarAdmin/>
+    <transition 
+      name="fade" 
+      mode="in-out">
+      <nuxt/>
+    </transition>
   </div>
 </template>
 
-<script>
-export default {
-  data() {
-    return {
-      items: [
-        { title: 'Home', icon: 'home', to: { name: 'index' } },
-        { title: 'Inspire', icon: 'lightbulb', to: { name: 'inspire' } }
-      ]
-    }
-  }
+<style>
+a {
+  color: #167df0;
 }
-</script>
+.navbar-item a.nuxt-link-exact-active {
+  border-bottom: 3px solid #167df0;
+}
+.fade-enter-active,
+.fade-leave-active {
+  -webkit-transition: opacity 0.3s, -webkit-transform 0.3s;
+  transition: opacity 0.3s, -webkit-transform 0.3s;
+  transition: opacity 0.3s, transform 0.3s;
+  transition: opacity 0.3s, transform 0.3s, -webkit-transform 0.3s;
+}
+.fade-enter {
+  opacity: 100;
+  -webkit-transform: translateY(-20px);
+  transform: translateY(-20px);
+}
+.fade-leave-to {
+  opacity: 100;
+  -webkit-transform: translateY(20px);
+  transform: translateY(20px);
+}
+</style>
