@@ -30,14 +30,24 @@
       <div class="navbar-start">
         <p class="navbar-item">
           <nuxt-link 
-            to="/addcar" 
+            to="/add/cars" 
             class="button is-info">Add Car</nuxt-link>
         </p>
         <p class="navbar-item">
           <nuxt-link 
             class="button is-info" 
-            to="/addnews">Add News</nuxt-link>
-        </p>     
+            to="/add/news">Add News</nuxt-link>
+        </p>
+        <p class="navbar-item">
+          <nuxt-link 
+            class="button is-info" 
+            to="/add/topic">Add Topic</nuxt-link>
+        </p>        
+        <p class="navbar-item">
+          <nuxt-link 
+            class="button is-info" 
+            to="/add/brand">Add Brand</nuxt-link>
+        </p>   
         <div class="navbar-item has-dropdown is-hoverable">
           <a class="navbar-link">
             Edit Defaults

@@ -1,17 +1,17 @@
 <template>
   <div>
     <BaseHero 
-      title="Add a car" 
+      :title="'Add New '+ $route.params.id" 
       subtitle="based on defaults"/>
     <section class="section has-background-light">
       <div class="container">           
         <div class="columns">
           <div class="column">
             <h2 class="title">
-              Neues Auto
+              Add {{ $route.params.id }}
             </h2>
             <b-field 
-              v-for="(item, index) in carsData" 
+              v-for="(item, index) in data" 
               :label="item.name"
               :key="index">
               <!-- Text-->
@@ -109,13 +109,8 @@
             </button>
           </div>
           <div class="column">
-            <h2 class="title">Specs</h2>
-            <b-field 
-              v-for="(spec, index) in specs" 
-              :key="index"
-              :label="spec.name">
-              <b-input v-model="spec.value"/>
-            </b-field>            
+            <h2 class="title">if blocks show blocks</h2>
+           
           </div>
         </div>
       </div>
@@ -130,13 +125,8 @@ import { storage } from '~/plugins/firebase.js'
 export default {
   data() {
     return {
-      specs: [
-        { name: 'he', id: 1 },
-        { name: 'hehe', id: 2 },
-        { name: 'hehehe', id: 3 }
-      ],
       tags: [],
-      cars: [],
+      data: [],
       name: '',
       filteredTags: [],
       date: new Date(),
@@ -149,14 +139,7 @@ export default {
       uploadEnd: false,
       downloadURL: '',
       //cars
-      writeCarSuccessful: false,
-      car: {
-        carName: '',
-        carModel: '',
-        carBrand: '',
-        carYear: '',
-        carImage: ''
-      }
+      writeCarSuccessful: false
     }
   },
   layout: 'admin',
@@ -245,11 +228,10 @@ export default {
     },
     async writeCarToFirestore() {
       const ref = fireDb
-        .collection('cars')
+        .collection(this.params.id)
         .doc(this.car.carName.replace(/\s+/g, '-').toLowerCase())
       const document = {
-        carsData: this.carsData,
-        specs: this.specs
+        data: this.data
       }
       try {
         await ref.set(document)
@@ -260,15 +242,15 @@ export default {
       this.writeCarSuccessful = true
     }
   },
-  async asyncData({ app, store }) {
-    let cars = await fireDb
+  async asyncData({ params }) {
+    let docs = await fireDb
       .collection('defaults')
-      .doc('carsData')
+      .doc(params.id)
       .get()
 
-    if (cars.data()) {
+    if (docs.data()) {
       return {
-        carsData: cars.data().carsData
+        data: docs.data().defaults
       }
     }
   }
