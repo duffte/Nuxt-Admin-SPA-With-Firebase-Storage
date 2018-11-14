@@ -1,28 +1,28 @@
 <template>
   <div>
     <BaseHero 
-      title="Car Defaults" 
-      subtitle="careful"/>
+      :title="$route.params.id +' Defaults'" 
+      subtitle="DANGERZONE"/>
     <section class="section has-background-light">
       <div class="container">
         <div class="columns">
           <div class="column is-6">
-            <div v-if="carsData.length > 0">
+            <div v-if="data.length > 0">
               
               <draggable 
-                v-model="carsData" 
+                v-model="data" 
                 @start="drag=true" 
                 @end="drag=false">
                 <!-- Data Loop -->
                 <div 
-                  v-for="(item, index) in carsData"                 
+                  v-for="(item, index) in data"                 
                   :key="index" 
                   class="box">  
 
                   <!-- Name -->  
                   <h2 class="title is-4">{{ item.name }} ({{ item.type }}) <button 
                     class="delete" 
-                    @click="deleteBlock"/></h2>        
+                    @click="deleteBlock(index)"/></h2>        
                   <b-field>
                     <b-input v-model="item.name"/>                
                   </b-field> 
@@ -139,17 +139,16 @@
                       placeholder="How to use the field"/>                
                   </b-field> 
 
-                </div>
-            </draggable></div>  
+            </div></draggable></div>  
             <hr>
             <button 
               class="button is-fullwidth" 
-              @click="addCarsData">Add Cars Item</button>
+              @click="addData">Add Item</button>
             <hr>
             <b-field>
               <button 
                 class="button is-fullwidth is-success" 
-                @click="writeToFirestore">Update Cars Defaults</button>
+                @click="writeToFirestore">Update Defaults</button>
             </b-field>
           </div>
           <div class="column is-6 content">
@@ -172,19 +171,19 @@ export default {
   layout: 'admin',
   data() {
     return {
-      carsData: [],
+      data: [],
       writeSuccessful: false
     }
   },
   methods: {
     deleteBlock: function(index) {
-      this.carsData.splice(index, 1)
+      this.data.splice(index, 1)
     },
     async writeToFirestore() {
-      var carsData = []
-      const ref = fireDb.collection('defaults').doc('carsData')
+      var data = []
+      const ref = fireDb.collection('defaults').doc(this.$route.params.id)
       const document = {
-        carsData: this.carsData
+        defaults: this.data
       }
       ref.get().then(function(thisDoc) {
         if (thisDoc.exists) {
@@ -196,23 +195,23 @@ export default {
         }
       })
     },
-    addCarsData() {
-      this.carsData.push({
+    addData() {
+      this.data.push({
         name: '',
         type: '',
         guide: ''
       })
     }
   },
-  async asyncData({ app, store }) {
-    let cars = await fireDb
+  async asyncData({ params }) {
+    let docs = await fireDb
       .collection('defaults')
-      .doc('carsData')
+      .doc(params.id)
       .get()
 
-    if (cars.data()) {
+    if (docs.data()) {
       return {
-        carsData: cars.data().carsData
+        data: docs.data().defaults
       }
     }
   }
