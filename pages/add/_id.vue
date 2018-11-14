@@ -252,6 +252,10 @@ export default {
       return {
         data: docs.data().defaults
       }
+    } else {
+      return {
+        data: []
+      }
     }
   }
 }

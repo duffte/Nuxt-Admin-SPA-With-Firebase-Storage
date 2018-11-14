@@ -9,7 +9,7 @@
         to="/" 
         class="navbar-item">
         <img 
-          src="~/assets/emil.svg" 
+          src="~/assets/emil.svg"
           width="150" 
           height="50">
       </router-link>
@@ -46,7 +46,7 @@
         <p class="navbar-item">
           <nuxt-link 
             class="button is-info" 
-            to="/add/brand">Add Brand</nuxt-link>
+            to="/add/brands">Add Brand</nuxt-link>
         </p>   
         <div class="navbar-item has-dropdown is-hoverable">
           <a class="navbar-link">

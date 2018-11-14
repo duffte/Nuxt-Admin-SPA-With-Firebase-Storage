@@ -38,4 +38,7 @@ export default {
 </script>
 
 <style>
+.title {
+  text-transform: capitalize;
+}
 </style>
