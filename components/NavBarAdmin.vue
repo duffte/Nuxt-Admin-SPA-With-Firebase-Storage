@@ -1,7 +1,7 @@
 <template>
   <nav 
     id="nav" 
-    class="navbar" 
+    class="navbar is-dark" 
     role="navigation" 
     aria-label="main navigation">
     <div class="navbar-brand">
@@ -29,10 +29,14 @@
       class="navbar-menu">
       <div class="navbar-start">
         <p class="navbar-item">
-          <nuxt-link to="/addcar">Add Car</nuxt-link>
+          <nuxt-link 
+            to="/addcar" 
+            class="button is-info">Add Car</nuxt-link>
         </p>
         <p class="navbar-item">
-          <nuxt-link to="/addnews">Add News</nuxt-link>
+          <nuxt-link 
+            class="button is-info" 
+            to="/addnews">Add News</nuxt-link>
         </p>     
         <div class="navbar-item has-dropdown is-hoverable">
           <a class="navbar-link">

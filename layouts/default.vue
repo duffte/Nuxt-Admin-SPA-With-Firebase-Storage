@@ -10,12 +10,6 @@
 </template>
 
 <style>
-a {
-  color: #167df0;
-}
-.navbar-item a.nuxt-link-exact-active {
-  border-bottom: 3px solid #167df0;
-}
 .fade-enter-active,
 .fade-leave-active {
   -webkit-transition: opacity 0.3s, -webkit-transform 0.3s;
