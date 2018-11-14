@@ -102,14 +102,110 @@
             
             <button 
               :disabled="writeCarSuccessful"
-              class="button" 
+              class="button is-fullwidth" 
               @click="writeCarToFirestore">
-              <span v-if="!writeCarSuccessful">Save Car</span>
+              <span v-if="!writeCarSuccessful">Store</span>
               <span v-else>Successful!</span>
             </button>
           </div>
           <div class="column">
-            <h2 class="title">if blocks show blocks</h2>
+            <h1 class="title">Blocks</h1>
+
+            <ul class="">
+              <li 
+                v-for="(block, index) in blocks" 
+                :key="index"
+                class="box">
+                <div v-if="block.type == 'text'" >
+                  <h3 class="title is-5">Paragraph <button 
+                    class="delete" 
+                    @click="deleteBlock(index)">x</button></h3>
+                  <label>Text</label>
+                  <no-ssr>
+                    <markdown-editor 
+                      ref="markdownEditor" 
+                      v-model="block.content"/>
+                  </no-ssr>
+                  <hr>
+                </div>                    
+                <div v-if="block.type == 'image'"> 
+                  <h3 class="title is-5">Image <button 
+                    class="delete" 
+                    @click="deleteBlock(index)">x</button></h3>
+                  <div>
+                    <button
+                      v-if="!uploadEnd && !uploading"
+                      @click="selectFile">
+                      Upload an image
+                    </button>
+                    <input
+                      id="files"
+                      ref="uploadInput"
+                      :multiple="false"
+                      type="file"
+                      name="file"
+                      accept="image/*"
+                      @change="detectFiles($event)" >
+                    <progress
+                      v-if="uploading && !uploadEnd"
+                      :value="progressUpload">
+                      {{ progressUpload }}%
+                    </progress>
+                    <img
+                      v-if="uploadEnd"
+                      :src="downloadURL"
+                      width="100%"
+                    >
+                    <div v-if="uploadEnd">
+                      <button
+                        class="button"
+                        @click="deleteImage()"
+                      >
+                        Delete
+                      </button>
+                    </div>
+                  </div>
+                  <label>Source</label>
+                  <input 
+                    v-model="block.src" 
+                    type="text" 
+                    class="input">
+                  <label>Caption</label>
+                  <input 
+                    v-model="block.caption" 
+                    type="text" 
+                    class="input">
+                  <hr>
+                </div> 
+                <div v-if="block.type == 'car'">
+                  <h3 class="title is-5">Car <button 
+                    class="delete" 
+                    @click="deleteBlock(index)">x</button></h3>     
+                  <p class="content"><b>Selected:</b> {{ block.selected }}</p>
+                  <b-field label="Find a car">
+                    <b-autocomplete
+                      v-model="block.name"
+                      :data="filteredDataObj"
+                      keep-first="true"
+                      open-on-focus="true"
+                      placeholder="e.g. BMW"
+                      field="carName"
+                      @select="option => block.selected = option"/>
+                  </b-field>        
+                  <hr>
+                </div>                   
+              </li>
+            </ul>
+            
+            <button 
+              class="button" 
+              @click="addBlock()">Add new Text</button>
+            <button 
+              class="button" 
+              @click="addImage()">Add new Image</button>
+            <button 
+              class="button" 
+              @click="addCar()">Add new Car</button>  
            
           </div>
         </div>
@@ -127,6 +223,8 @@ export default {
     return {
       tags: [],
       data: [],
+      cars: [],
+      blocks: [],
       name: '',
       filteredTags: [],
       date: new Date(),
@@ -175,11 +273,24 @@ export default {
     }
   },
   methods: {
-    setImageSource: function(index) {
-      this.blocks[index].src = downloadURL
-    },
     deleteBlock: function(index) {
       this.blocks.splice(index, 1)
+    },
+    addBlock() {
+      this.blocks.push({
+        content: 'new block',
+        type: 'text',
+        id: this.idcounter++
+      })
+    },
+    addImage() {
+      this.blocks.push({ content: 'new block', type: 'image' })
+    },
+    addCar() {
+      this.blocks.push({ name: '', selected: {}, type: 'car' })
+    },
+    setImageSource: function(index) {
+      this.blocks[index].src = downloadURL
     },
     //upload image
     selectFile() {
@@ -248,13 +359,25 @@ export default {
       .doc(params.id)
       .get()
 
+    let carCollection = []
+    let cars = await fireDb
+      .collection('cars')
+      .get()
+      .then(querySnapshot => {
+        querySnapshot.forEach(doc => {
+          carCollection.push(doc.data())
+        })
+      })
+
     if (docs.data()) {
       return {
-        data: docs.data().defaults
+        data: docs.data().defaults,
+        cars: carCollection
       }
     } else {
       return {
-        data: []
+        data: [],
+        cars: carCollection
       }
     }
   }

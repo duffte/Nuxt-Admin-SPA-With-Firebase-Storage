@@ -47,7 +47,12 @@
           <nuxt-link 
             class="button is-info" 
             to="/add/brands">Add Brand</nuxt-link>
-        </p>   
+        </p>  
+        <p class="navbar-item">
+          <nuxt-link 
+            class="button is-info" 
+            to="/add/specifications">Add Specification</nuxt-link>
+        </p>  
         <div class="navbar-item has-dropdown is-hoverable">
           <a class="navbar-link">
             Edit Defaults
@@ -62,6 +67,12 @@
             </a>
             <a class="navbar-item">
               <nuxt-link to="/defaults/brands">Brands</nuxt-link>
+            </a>
+            <a class="navbar-item">
+              <nuxt-link to="/defaults/topic">Topics</nuxt-link>
+            </a>
+            <a class="navbar-item">
+              <nuxt-link to="/defaults/specifications">Specifications</nuxt-link>
             </a>
           </div>
         </div>
