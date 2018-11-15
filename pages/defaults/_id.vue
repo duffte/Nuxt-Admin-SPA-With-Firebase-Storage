@@ -76,6 +76,14 @@
                       <b-icon icon="image"/>
                       <span>Image</span>
                     </b-radio-button>
+
+                    <b-radio-button 
+                      v-model="item.type"
+                      native-value="radio"
+                      type="is-success">
+                      <b-icon icon="toggle-switch"/>
+                      <span>Radio</span>
+                    </b-radio-button>
                 
                   </b-field>
 
@@ -185,7 +193,7 @@ export default {
       const document = {
         defaults: this.data
       }
-      ref.get().then(function(thisDoc) {
+      ref.get().then(thisDoc => {
         if (thisDoc.exists) {
           ref.update(document)
           this.writeSuccessful = true

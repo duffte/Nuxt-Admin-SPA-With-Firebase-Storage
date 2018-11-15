@@ -10,15 +10,25 @@
             <h2 class="title">
               Add {{ $route.params.id }}
             </h2>
+            <b-field
+              label="Permalink/id">
+              <b-input 
+                v-model="id" 
+                type="text"
+                placeholder="e.g. this-is-a-permalink"/>
+            </b-field>
             <b-field 
-              v-for="(item, index) in data" 
-              :label="item.name"
-              :key="index">
+              v-for="(item, index) in data"
+              :label="item.name" 
+              :key="index"
+            >
               <!-- Text-->
-              <b-field v-if="item.type == 'text'">
+              <b-field 
+                v-if="item.type == 'text'" 
+              >
                 <b-input 
                   v-model="item.content" 
-                />
+                />                
               </b-field>
               <!-- Textarea-->
               <b-field v-if="item.type == 'number'">
@@ -96,6 +106,16 @@
                     type="text"/>
                 </b-field>
               </div>
+
+              <!-- Radio -->
+              <b-field v-if="item.type == 'radio'">
+                <b-switch 
+                  v-model="item.content"
+                  true-value="Yes"
+                  false-value="No">
+                  {{ item.content }}
+                </b-switch>
+              </b-field>
 
             </b-field>
             
@@ -196,17 +216,18 @@
                 </div>                   
               </li>
             </ul>
-            
-            <button 
-              class="button" 
-              @click="addBlock()">Add new Text</button>
-            <button 
-              class="button" 
-              @click="addImage()">Add new Image</button>
-            <button 
-              class="button" 
-              @click="addCar()">Add new Car</button>  
-           
+            <hr>
+            <b-field grouped>
+              <button 
+                class="button" 
+                @click="addBlock()">Add new Text</button>
+              <button 
+                class="button" 
+                @click="addImage()">Add new Image</button>
+              <button 
+                class="button" 
+                @click="addCar()">Add new Car</button>  
+            </b-field>
           </div>
         </div>
       </div>
@@ -221,6 +242,7 @@ import { storage } from '~/plugins/firebase.js'
 export default {
   data() {
     return {
+      id: '',
       tags: [],
       data: [],
       cars: [],
@@ -278,7 +300,7 @@ export default {
     },
     addBlock() {
       this.blocks.push({
-        content: 'new block',
+        content: '',
         type: 'text',
         id: this.idcounter++
       })
@@ -338,11 +360,10 @@ export default {
       this.downloadURL = ''
     },
     async writeCarToFirestore() {
-      const ref = fireDb
-        .collection(this.params.id)
-        .doc(this.car.carName.replace(/\s+/g, '-').toLowerCase())
+      const ref = fireDb.collection(this.$route.params.id).doc(this.id)
       const document = {
-        data: this.data
+        data: this.data,
+        blocks: this.blocks
       }
       try {
         await ref.set(document)
@@ -350,7 +371,7 @@ export default {
         // TODO: error handling
         console.error(e)
       }
-      this.writeCarSuccessful = true
+      this.writeSuccessful = true
     }
   },
   async asyncData({ params }) {

@@ -3,7 +3,7 @@
     <NavBarAdmin/>
     <transition 
       name="fade" 
-      mode="in-out">
+      mode="out-in">
       <nuxt/>
     </transition>
   </div>
