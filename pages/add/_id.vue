@@ -330,7 +330,11 @@ export default {
     upload(file) {
       this.fileName = file.name
       this.uploading = true
-      this.uploadTask = storage.ref('news/' + file.name).put(file)
+      var baseDir = this.$route.params.id
+      var extDir = this.id
+      this.uploadTask = storage
+        .ref(`${baseDir}/${extDir}/${file.name}`)
+        .put(file)
     },
     deleteImage() {
       if (this.oldImgUrl === '') {
@@ -344,8 +348,10 @@ export default {
       this.downloadURL = this.oldImgUrl
     },
     deleteImgOnFirebase() {
+      var baseDir = this.$route.params.id
+      var extDir = this.id
       storage
-        .ref('news/' + this.fileName)
+        .ref(`${baseDir}/${extDir}/${this.fileName}`)
         .delete()
         .then(() => {
           this.uploading = false
