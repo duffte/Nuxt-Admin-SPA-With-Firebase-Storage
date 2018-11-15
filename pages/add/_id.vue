@@ -206,8 +206,8 @@
                     <b-autocomplete
                       v-model="block.name"
                       :data="filteredDataObj"
-                      keep-first="true"
-                      open-on-focus="true"
+                      :keep-first="keepFirst"
+                      :open-on-focus="openOnFocus"
                       placeholder="e.g. BMW"
                       field="carName"
                       @select="option => block.selected = option"/>
@@ -259,7 +259,10 @@ export default {
       uploadEnd: false,
       downloadURL: '',
       //cars
-      writeCarSuccessful: false
+      writeCarSuccessful: false,
+      //buefy
+      keepFirst: false,
+      openOnFocus: true
     }
   },
   layout: 'admin',
