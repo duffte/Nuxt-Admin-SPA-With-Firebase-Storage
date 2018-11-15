@@ -55,7 +55,7 @@
         </p>  
         <div class="navbar-item has-dropdown is-hoverable">
           <a class="navbar-link">
-            Edit Defaults
+            Danger Zone
           </a>
 
           <div class="navbar-dropdown">
@@ -73,6 +73,29 @@
             </a>
             <a class="navbar-item">
               <nuxt-link to="/defaults/specifications">Specifications</nuxt-link>
+            </a>
+          </div>
+        </div>
+        <div class="navbar-item has-dropdown is-hoverable">
+          <a class="navbar-link">
+            Edit Content
+          </a>
+
+          <div class="navbar-dropdown">
+            <a class="navbar-item">
+              <nuxt-link to="/list/news">News</nuxt-link>
+            </a>
+            <a class="navbar-item">
+              <nuxt-link to="/list/cars">Cars</nuxt-link>
+            </a>
+            <a class="navbar-item">
+              <nuxt-link to="/list/brands">Brands</nuxt-link>
+            </a>
+            <a class="navbar-item">
+              <nuxt-link to="/list/topic">Topics</nuxt-link>
+            </a>
+            <a class="navbar-item">
+              <nuxt-link to="/list/specifications">Specifications</nuxt-link>
             </a>
           </div>
         </div>

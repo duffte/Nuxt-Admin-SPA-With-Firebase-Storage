@@ -378,14 +378,14 @@ export default {
     }
   },
   async asyncData({ params }) {
-    let docs = await fireDb
+    let def = await fireDb
       .collection('defaults')
       .doc(params.id)
       .get()
 
     let carCollection = []
     let cars = await fireDb
-      .collection('cars')
+      .collection(params.id)
       .get()
       .then(querySnapshot => {
         querySnapshot.forEach(doc => {
@@ -393,9 +393,9 @@ export default {
         })
       })
 
-    if (docs.data()) {
+    if (def.data()) {
       return {
-        data: docs.data().defaults,
+        data: def.data().defaults,
         cars: carCollection
       }
     } else {
