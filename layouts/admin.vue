@@ -9,6 +9,14 @@
   </div>
 </template>
 
+<script>
+export default {
+  data: function() {
+    return {}
+  }
+}
+</script>
+
 <style>
 .fade-enter-active,
 .fade-leave-active {

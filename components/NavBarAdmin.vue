@@ -41,7 +41,7 @@
         <p class="navbar-item">
           <nuxt-link 
             class="button is-info" 
-            to="/add/topic">Add Topic</nuxt-link>
+            to="/add/topics">Add Topic</nuxt-link>
         </p>        
         <p class="navbar-item">
           <nuxt-link 
@@ -69,7 +69,7 @@
               <nuxt-link to="/defaults/brands">Brands</nuxt-link>
             </a>
             <a class="navbar-item">
-              <nuxt-link to="/defaults/topic">Topics</nuxt-link>
+              <nuxt-link to="/defaults/topics">Topics</nuxt-link>
             </a>
             <a class="navbar-item">
               <nuxt-link to="/defaults/specifications">Specifications</nuxt-link>
@@ -92,13 +92,13 @@
               <nuxt-link to="/list/brands">Brands</nuxt-link>
             </a>
             <a class="navbar-item">
-              <nuxt-link to="/list/topic">Topics</nuxt-link>
+              <nuxt-link to="/list/topics">Topics</nuxt-link>
             </a>
             <a class="navbar-item">
               <nuxt-link to="/list/specifications">Specifications</nuxt-link>
             </a>
           </div>
-        </div>
+        </div>       
       </div>
     </div> 
   </nav>
@@ -107,6 +107,14 @@
 <script>
 export default {
   name: 'Navbar',
+  props: {
+    collections: {
+      type: Array,
+      default: () => {
+        return null
+      }
+    }
+  },
   data() {
     return {
       showNav: false

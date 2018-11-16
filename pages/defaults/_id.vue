@@ -55,10 +55,10 @@
 
                     <b-radio-button 
                       v-model="item.type"
-                      native-value="tags"
+                      native-value="array"
                       type="is-success">
                       <b-icon icon="tag"/>
-                      <span>Tags</span>
+                      <span>Array</span>
                     </b-radio-button>
 
                     <b-radio-button 
@@ -84,8 +84,9 @@
                       <b-icon icon="toggle-switch"/>
                       <span>Radio</span>
                     </b-radio-button>
-                
+               
                   </b-field>
+
 
                   <!-- Fields row 2 -->
 

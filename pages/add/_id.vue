@@ -27,33 +27,33 @@
                 v-if="item.type == 'text'" 
               >
                 <b-input 
-                  v-model="item.content" 
+                  v-model="document[item.name]" 
                 />                
               </b-field>
               <!-- Textarea-->
               <b-field v-if="item.type == 'number'">
                 <b-input 
-                  v-model="item.content" 
+                  v-model="document[item.name]" 
                   type="number"/>
               </b-field>
               <!-- Textarea-->
               <b-field v-if="item.type == 'textarea'">
                 <b-input 
-                  v-model="item.content"  
+                  v-model="document[item.name]"  
                   type="textarea"/>
               </b-field>
               <!-- Tags-->
-              <b-field v-if="item.type == 'tags'">
+              <b-field v-if="item.type == 'array'">
                 <b-taginput
-                  v-model="tags"
+                  v-model="document[item.name]"
                   ellipsis
                   icon="label"
-                  placeholder="Add a tag"/>
+                  placeholder="Add an option"/>
               </b-field>
               <!-- Date-->
               <b-field v-if="item.type == 'date'">
                 <b-datepicker 
-                  v-model="date"
+                  v-model="document[item.name]"
                   :first-day-of-week="1"
                   placeholder="Click to select...">
 
@@ -102,7 +102,7 @@
                 </div>
                 <b-field label="Source URL">
                   <b-input 
-                    v-model="item.content"  
+                    v-model="document[item.name]"  
                     type="text"/>
                 </b-field>
               </div>
@@ -110,12 +110,36 @@
               <!-- Radio -->
               <b-field v-if="item.type == 'radio'">
                 <b-switch 
-                  v-model="item.content"
+                  :value="false"
+                  v-model="document[item.name]"
+                  type="is-info"
                   true-value="Yes"
                   false-value="No">
-                  {{ item.content }}
+                  {{ document[item.name] }}
                 </b-switch>
               </b-field>
+
+              <!-- Topics -->
+              <b-field v-if="item.type == 'topic'">
+                <b-field label="Enter 1 or more topics">
+                  <b-taginput
+                    v-model="document[item.name]"
+                    :data="topics"
+                    autocomplete
+                    field="id"
+                    icon="label"
+                    placeholder="Add a topic"
+                    @typing="getFilteredTopics">
+                    <template slot-scope="props">
+                      {{ props.option }}
+                    </template>
+                    <template slot="empty">
+                      There are no items
+                    </template>
+                  </b-taginput>
+                </b-field>
+              </b-field>
+
 
             </b-field>
             
@@ -242,6 +266,7 @@ import { storage } from '~/plugins/firebase.js'
 export default {
   data() {
     return {
+      document: {},
       id: '',
       tags: [],
       data: [],
@@ -298,6 +323,16 @@ export default {
     }
   },
   methods: {
+    getFilteredTopics(text) {
+      var topics = this.topics.filter(option => {
+        return (
+          option
+            .toString()
+            .toLowerCase()
+            .indexOf(text.toLowerCase()) >= 0
+        )
+      })
+    },
     deleteBlock: function(index) {
       this.blocks.splice(index, 1)
     },
@@ -371,7 +406,7 @@ export default {
     async writeCarToFirestore() {
       const ref = fireDb.collection(this.$route.params.id).doc(this.id)
       const document = {
-        data: this.data,
+        data: this.document,
         blocks: this.blocks
       }
       try {
@@ -391,7 +426,7 @@ export default {
 
     let carCollection = []
     let cars = await fireDb
-      .collection(params.id)
+      .collection('cars')
       .get()
       .then(querySnapshot => {
         querySnapshot.forEach(doc => {
@@ -399,15 +434,27 @@ export default {
         })
       })
 
+    let topicCollection = []
+    let topics = await fireDb
+      .collection('topics')
+      .get()
+      .then(querySnapshot => {
+        querySnapshot.forEach(doc => {
+          topicCollection.push(doc.data().data[0].content)
+        })
+      })
+
     if (def.data()) {
       return {
         data: def.data().defaults,
-        cars: carCollection
+        cars: carCollection,
+        topics: topicCollection
       }
     } else {
       return {
         data: [],
-        cars: carCollection
+        cars: carCollection,
+        topics: topicCollection
       }
     }
   }
