@@ -53,6 +53,11 @@
             class="button is-info" 
             to="/add/specifications">Add Specification</nuxt-link>
         </p>  
+        <p class="navbar-item">
+          <nuxt-link 
+            class="button is-info" 
+            to="/add/authors">Add Author</nuxt-link>
+        </p>  
         <div class="navbar-item has-dropdown is-hoverable">
           <a class="navbar-link">
             Danger Zone
@@ -73,6 +78,9 @@
             </a>
             <a class="navbar-item">
               <nuxt-link to="/defaults/specifications">Specifications</nuxt-link>
+            </a>
+            <a class="navbar-item">
+              <nuxt-link to="/defaults/authors">Author</nuxt-link>
             </a>
           </div>
         </div>
@@ -96,6 +104,9 @@
             </a>
             <a class="navbar-item">
               <nuxt-link to="/list/specifications">Specifications</nuxt-link>
+            </a>
+            <a class="navbar-item">
+              <nuxt-link to="/list/authors">Authors</nuxt-link>
             </a>
           </div>
         </div>       
