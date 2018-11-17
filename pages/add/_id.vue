@@ -140,9 +140,18 @@
                 </b-field>
               </b-field>
 
-
-            </b-field>
-            
+              <!-- Author -->
+              <b-field v-if="item.type == 'author'">
+                <b-field>
+                  <b-autocomplete
+                    v-model="selected[item.name]"
+                    :data="filteredAuthors"
+                    placeholder="e.g. Anne"
+                    field="authorName"
+                    @select="option => document[item.name] = option"/>
+                </b-field>
+              </b-field>
+            </b-field>            
             
             <button 
               :disabled="writeCarSuccessful"
@@ -292,6 +301,16 @@ export default {
   },
   layout: 'admin',
   computed: {
+    filteredAuthors() {
+      return this.authors.filter(option => {
+        return (
+          option.authorName
+            .toString()
+            .toLowerCase()
+            .indexOf(this.name.toLowerCase()) >= 0
+        )
+      })
+    },
     filteredDataObj() {
       return this.cars.filter(option => {
         return (
@@ -323,6 +342,16 @@ export default {
     }
   },
   methods: {
+    getFilteredAuthors(text) {
+      var authors = this.authors.filter(option => {
+        return (
+          option
+            .toString()
+            .toLowerCase()
+            .indexOf(text.toLowerCase()) >= 0
+        )
+      })
+    },
     getFilteredTopics(text) {
       var topics = this.topics.filter(option => {
         return (
@@ -430,7 +459,7 @@ export default {
       .get()
       .then(querySnapshot => {
         querySnapshot.forEach(doc => {
-          carCollection.push(doc.data())
+          carCollection.push(doc.data().data)
         })
       })
 
@@ -444,17 +473,29 @@ export default {
         })
       })
 
+    let authorCollection = []
+    let authors = await fireDb
+      .collection('authors')
+      .get()
+      .then(querySnapshot => {
+        querySnapshot.forEach(doc => {
+          authorCollection.push(doc.data().data)
+        })
+      })
+
     if (def.data()) {
       return {
         data: def.data().defaults,
         cars: carCollection,
-        topics: topicCollection
+        topics: topicCollection,
+        authors: authorCollection
       }
     } else {
       return {
         data: [],
         cars: carCollection,
-        topics: topicCollection
+        topics: topicCollection,
+        authors: authorCollection
       }
     }
   }

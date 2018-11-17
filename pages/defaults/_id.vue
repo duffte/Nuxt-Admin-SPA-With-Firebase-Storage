@@ -133,6 +133,14 @@
 
                     <b-radio-button 
                       v-model="item.type"
+                      native-value="author"
+                      type="is-success">
+                      <b-icon icon="account-search"/>
+                      <span>Author</span>
+                    </b-radio-button>   
+
+                    <b-radio-button 
+                      v-model="item.type"
                       native-value="chart"
                       type="is-success">
                       <b-icon icon="poll-box"/>
