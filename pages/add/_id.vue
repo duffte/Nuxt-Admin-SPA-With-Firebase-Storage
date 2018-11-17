@@ -42,7 +42,7 @@
                   v-model="document[item.name]"  
                   type="textarea"/>
               </b-field>
-              <!-- Tags-->
+              <!-- Topics -->
               <b-field v-if="item.type == 'array'">
                 <b-taginput
                   v-model="document[item.name]"
