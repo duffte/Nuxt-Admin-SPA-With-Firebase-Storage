@@ -121,22 +121,13 @@
 
               <!-- Topics -->
               <b-field v-if="item.type == 'topic'">
-                <b-field label="Enter 1 or more topics">
-                  <b-taginput
-                    v-model="document[item.name]"
-                    :data="topics"
-                    autocomplete
-                    field="id"
-                    icon="label"
-                    placeholder="Add a topic"
-                    @typing="getFilteredTopics">
-                    <template slot-scope="props">
-                      {{ props.option }}
-                    </template>
-                    <template slot="empty">
-                      There are no items
-                    </template>
-                  </b-taginput>
+                <b-field>
+                  <b-autocomplete
+                    v-model="selected[item.name]"
+                    :data="filteredTopics"
+                    placeholder="e.g. Wettbewerb"
+                    field="topicName"
+                    @select="option => document[item.name] = option"/>
                 </b-field>
               </b-field>
 
@@ -284,6 +275,7 @@ export default {
       name: '',
       filteredTags: [],
       date: new Date(),
+      selected: [],
       //upload image
       oldImgUrl: '',
       progressUpload: 0,
@@ -301,6 +293,16 @@ export default {
   },
   layout: 'admin',
   computed: {
+    filteredTopics() {
+      return this.topics.filter(option => {
+        return (
+          option.topicName
+            .toString()
+            .toLowerCase()
+            .indexOf(this.name.toLowerCase()) >= 0
+        )
+      })
+    },
     filteredAuthors() {
       return this.authors.filter(option => {
         return (
@@ -469,7 +471,7 @@ export default {
       .get()
       .then(querySnapshot => {
         querySnapshot.forEach(doc => {
-          topicCollection.push(doc.data().data[0].content)
+          topicCollection.push(doc.data().data)
         })
       })
 
