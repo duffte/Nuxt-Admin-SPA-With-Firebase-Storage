@@ -79,7 +79,7 @@ export default {
       .get()
       .then(querySnapshot => {
         querySnapshot.forEach(doc => {
-          docCollection.push(doc.data())
+          docCollection.push(doc.data().data)
         })
       })
     return {
