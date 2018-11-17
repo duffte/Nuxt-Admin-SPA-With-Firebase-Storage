@@ -13,7 +13,7 @@
             <b-field
               label="Permalink/id">
               <b-input 
-                v-model="id" 
+                v-model="document.id" 
                 type="text"
                 placeholder="e.g. this-is-a-permalink"/>
             </b-field>
@@ -366,7 +366,7 @@ export default {
       this.fileName = file.name
       this.uploading = true
       var baseDir = this.$route.params.id
-      var extDir = this.id
+      var extDir = this.document.id
       this.uploadTask = storage
         .ref(`${baseDir}/${extDir}/${file.name}`)
         .put(file)
@@ -384,7 +384,7 @@ export default {
     },
     deleteImgOnFirebase() {
       var baseDir = this.$route.params.id
-      var extDir = this.id
+      var extDir = this.document.id
       storage
         .ref(`${baseDir}/${extDir}/${this.fileName}`)
         .delete()
@@ -404,7 +404,7 @@ export default {
       this.downloadURL = ''
     },
     async writeCarToFirestore() {
-      const ref = fireDb.collection(this.$route.params.id).doc(this.id)
+      const ref = fireDb.collection(this.$route.params.id).doc(this.document.id)
       const document = {
         data: this.document,
         blocks: this.blocks
