@@ -124,29 +124,63 @@
                 <b-field>
                   <b-autocomplete
                     v-model="selected[item.name]"
-                    :data="filteredTopics"
+                    :data="topics"
+                    open-on-focus="true"
                     placeholder="e.g. Wettbewerb"
                     field="topicName"
                     @select="option => document[item.name] = option"/>
                 </b-field>
               </b-field>
 
+
               <!-- Author -->
               <b-field v-if="item.type == 'author'">
                 <b-field>
                   <b-autocomplete
                     v-model="selected[item.name]"
-                    :data="filteredAuthors"
+                    :data="authors"
+                    open-on-focus="true"
                     placeholder="e.g. Anne"
                     field="authorName"
                     @select="option => document[item.name] = option"/>
                 </b-field>
               </b-field>
-            </b-field>            
+
+              <!-- Brand -->
+              <b-field v-if="item.type == 'brand'">
+                <b-field>
+                  <b-autocomplete
+                    v-model="selected[item.name]"
+                    :data="brands"
+                    open-on-focus="true"
+                    placeholder="e.g. BMW"
+                    field="brandName"
+                    @select="option => document[item.name] = option"/>
+                </b-field>
+              </b-field>              
+
+            </b-field>   
+
+            <!-- CAR SPECS -->
             
+            <br>
+            <h2 class="title">Specifications</h2>
+
+            <ul v-if="$route.params.id == 'cars'">
+              <li 
+                v-for="spec in specifications" 
+                :key="spec.id">
+
+                <b-field :label="spec.specName + ' (' + spec.specAbbr + ')'">
+                  <b-input 
+                    v-model="specs[spec.specName]"  
+                    type="number"/>
+              </b-field></li>
+            </ul>         
+            <br>
             <button 
               :disabled="writeCarSuccessful"
-              class="button is-fullwidth" 
+              class="button is-success is-fullwidth" 
               @click="writeCarToFirestore">
               <span v-if="!writeCarSuccessful">Store</span>
               <span v-else>Successful!</span>
@@ -266,9 +300,13 @@ import { storage } from '~/plugins/firebase.js'
 export default {
   data() {
     return {
+      specs: {},
+      specifications: {},
+      newsTags: [],
       document: {},
       id: '',
       tags: [],
+      brands: [],
       data: [],
       cars: [],
       blocks: [],
@@ -293,16 +331,6 @@ export default {
   },
   layout: 'admin',
   computed: {
-    filteredTopics() {
-      return this.topics.filter(option => {
-        return (
-          option.topicName
-            .toString()
-            .toLowerCase()
-            .indexOf(this.name.toLowerCase()) >= 0
-        )
-      })
-    },
     filteredAuthors() {
       return this.authors.filter(option => {
         return (
@@ -435,11 +463,21 @@ export default {
       this.downloadURL = ''
     },
     async writeCarToFirestore() {
+      if (this.blocks.length > 0) {
+        var timeToRead = await Math.round(
+          JSON.stringify(this.blocks).split(' ').length / 200
+        )
+
+        this.document.timeToRead = timeToRead
+      }
       const ref = fireDb.collection(this.$route.params.id).doc(this.document.id)
+
       const document = {
         data: this.document,
-        blocks: this.blocks
+        blocks: this.blocks,
+        specs: this.specs
       }
+
       try {
         await ref.set(document)
       } catch (e) {
@@ -485,19 +523,43 @@ export default {
         })
       })
 
+    let brandCollection = []
+    let brands = await fireDb
+      .collection('brands')
+      .get()
+      .then(querySnapshot => {
+        querySnapshot.forEach(doc => {
+          brandCollection.push(doc.data().data)
+        })
+      })
+
+    let specCollection = []
+    let specs = await fireDb
+      .collection('specifications')
+      .get()
+      .then(querySnapshot => {
+        querySnapshot.forEach(doc => {
+          specCollection.push(doc.data().data)
+        })
+      })
+
     if (def.data()) {
       return {
         data: def.data().defaults,
         cars: carCollection,
         topics: topicCollection,
-        authors: authorCollection
+        authors: authorCollection,
+        brands: brandCollection,
+        specifications: specCollection
       }
     } else {
       return {
         data: [],
         cars: carCollection,
         topics: topicCollection,
-        authors: authorCollection
+        authors: authorCollection,
+        brands: brandCollection,
+        specifications: specCollection
       }
     }
   }
