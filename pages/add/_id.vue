@@ -173,7 +173,7 @@
 
                 <b-field :label="spec.specName + ' (' + spec.specAbbr + ')'">
                   <b-input 
-                    v-model="specs[spec.specName]"  
+                    v-model="spec.specValue"  
                     type="number"/>
               </b-field></li>
             </ul>         
@@ -467,15 +467,16 @@ export default {
         var timeToRead = await Math.round(
           JSON.stringify(this.blocks).split(' ').length / 200
         )
-
         this.document.timeToRead = timeToRead
       }
+      this.document.specs = this.specifications
+
       const ref = fireDb.collection(this.$route.params.id).doc(this.document.id)
 
       const document = {
         data: this.document,
         blocks: this.blocks,
-        specs: this.specs
+        specs: this.specifications
       }
 
       try {
